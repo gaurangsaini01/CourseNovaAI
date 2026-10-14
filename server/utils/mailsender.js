@@ -3,9 +3,7 @@ require("dotenv").config();
 
 var transport = nodemailer.createTransport({
   host:
-    process.env.NODE_ENV === "dev"
-      ? process.env.DEV_MAIL_HOST
-      : process.env.MAIL_HOST,
+    process.env.FRONTEND_URL,
   port: process.env.NODE_ENV === "dev" ? 2525 : 587,
   auth: {
     user:

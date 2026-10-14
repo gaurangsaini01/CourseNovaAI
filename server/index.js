@@ -21,7 +21,7 @@ const paymentRoutes = require("./routes/Payments.route")
 //adding middlewares
 app.use(express.json());
 app.use(cookieParser());
-const FRONTEND_URL = process.env.NODE_ENV === 'prod' ? process.env.FRONTEND_URL_PROD : process.env.FRONTEND_URL_DEV;
+const FRONTEND_URL = process.env.FRONTEND_URL 
 app.use(cors({
     origin: FRONTEND_URL,
     credentials: true,

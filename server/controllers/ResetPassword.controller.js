@@ -30,9 +30,7 @@ async function resetPasswordToken(req, res) {
     );
     //create URL
     const url = `${
-      process.env.NODE_ENV === "prod"
-      ? process.env.FRONTEND_URL_PROD
-      : process.env.FRONTEND_URL_DEV
+      process.env.FRONTEND_URL
     }/update-password/${resetPasswordToken}`;
     //send mail
     const info = await mailSender(
