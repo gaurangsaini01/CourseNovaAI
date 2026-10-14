@@ -6,11 +6,11 @@ services:
         VITE_APP_BASE_URL: ${VITE_APP_BASE_URL}
         VITE_APP_RAZORPAY_KEY: ${RAZORPAY_KEY_ID}
     ports:
-      - "5174:80"
+      - "80:80"
+    depends_on:
+      - server
   server:
     build:
       context: ./server
     env_file:
       - ./server/.env
-    ports:
-      - "1234:1234"
