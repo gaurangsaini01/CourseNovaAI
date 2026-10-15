@@ -49,3 +49,25 @@ jobs:
             -t $REGISTRY/server:latest \
             ./server
           docker push --all-tags $REGISTRY/server
+  deploy:
+    needs: build-and-push-to-gcp
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up SSH
+        env:
+          SSH_KEY: ${{ secrets.VM_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H ${{ vars.VM_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy on VM
+        run: |
+          ssh -i ~/.ssh/deploy_key -o IdentitiesOnly=yes \
+            ${{ vars.VM_USER }}@${{ vars.VM_HOST }} '
+              cd ~/CourseNovaAI &&
+              git pull &&
+              docker compose -f docker-compose.prod.yaml pull &&
+              docker compose -f docker-compose.prod.yaml up -d
+            '
