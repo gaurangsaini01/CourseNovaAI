@@ -65,7 +65,7 @@ jobs:
       - name: Deploy on VM
         run: |
           ssh -i ~/.ssh/deploy_key -o IdentitiesOnly=yes \
-            ${{ vars.VM_USER }}@${{ vars.VM_HOST }} '
+            ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} '
               cd ~/CourseNovaAI &&
               git pull &&
               docker compose -f docker-compose.prod.yaml pull &&
