@@ -1,0 +1,13 @@
+services:
+  server:
+    image: asia-south2-docker.pkg.dev/project-4d3d7acb-058d-4117-94f/coursenova/server:latest
+    env_file:
+      - ./server/.env
+    restart: unless-stopped
+  client:
+    image: asia-south2-docker.pkg.dev/project-4d3d7acb-058d-4117-94f/coursenova/client:latest
+    ports:
+      - "80:80"
+    depends_on:
+      - server
+    restart: unless-stopped
