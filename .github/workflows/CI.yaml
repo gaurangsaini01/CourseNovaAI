@@ -4,14 +4,48 @@ on:
   push:
     branches:
       - main
+env:
+  REGISTRY: asia-south2-docker.pkg.dev/project-4d3d7acb-058d-4117-94f/coursenova
+
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
-  build:
+  build-and-push-to-gcp:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build client image
-        run: docker build --build-arg VITE_APP_BASE_URL=/api/v1 -t coursenova-client ./client
+      - name: Login to Google Cloud (no password)
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: projects/273894459279/locations/global/workloadIdentityPools/github-pool/providers/github-provider
+          service_account: github-deployer@project-4d3d7acb-058d-4117-94f.iam.gserviceaccount.com
+          token_format: access_token
 
-      - name: Build server image
-        run: docker build -t coursenova-server ./server
+      - name: Docker login to Artifact Registry
+        uses: docker/login-action@v3
+        with:
+          registry: asia-south2-docker.pkg.dev
+          username: oauth2accesstoken
+          password: ${{ steps.auth.outputs.access_token }}
+
+      - name: Build and push client
+        run: |
+          docker build \
+            --build-arg VITE_APP_BASE_URL=/api/v1 \
+            --build-arg VITE_APP_RAZORPAY_KEY=${{ vars.RAZORPAY_KEY_ID }} \
+            -t $REGISTRY/client:${{ github.sha }} \
+            -t $REGISTRY/client:latest \
+            ./client
+          docker push --all-tags $REGISTRY/client
+
+      - name: Build and push server
+        run: |
+          docker build \
+            -t $REGISTRY/server:${{ github.sha }} \
+            -t $REGISTRY/server:latest \
+            ./server
+          docker push --all-tags $REGISTRY/server
