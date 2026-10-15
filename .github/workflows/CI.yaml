@@ -1,0 +1,17 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build client image
+        run: docker build --build-arg VITE_APP_BASE_URL=/api/v1 -t coursenova-client ./client
+
+      - name: Build server image
+        run: docker build -t coursenova-server ./server
