@@ -11,3 +11,9 @@ services:
     depends_on:
       - server
     restart: unless-stopped
+  ai-server:
+    build:
+      context: ../CourseNova-FastApi-Backend
+    env_file:
+      - ../CourseNova-FastApi-Backend/.env
+    restart: unless-stopped

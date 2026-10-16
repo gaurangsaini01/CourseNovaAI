@@ -16,3 +16,10 @@ services:
     env_file:
       - ./server/.env
     restart: unless-stopped
+  ai-server:
+    build:
+      context: ../StudyNotionFastAPI
+    env_file:
+      - ../StudyNotionFastAPI/.env
+    restart: unless-stopped
+    
