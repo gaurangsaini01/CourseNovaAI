@@ -12,8 +12,7 @@ services:
       - server
     restart: unless-stopped
   ai-server:
-    build:
-      context: ../CourseNova-FastApi-Backend
+    image: asia-south2-docker.pkg.dev/project-4d3d7acb-058d-4117-94f/coursenova/ai-server:latest
     env_file:
       - ../CourseNova-FastApi-Backend/.env
     restart: unless-stopped
