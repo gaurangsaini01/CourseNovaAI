@@ -30,7 +30,7 @@ function Navbar({ open, setOpen }: NavbarProps) {
           "GET",
           categories.CATEGORIES_API
         );
-        setSublinks(result.data.data);
+        setSublinks(result.data.data.data);
       } catch (err) {
         console.error(err);
       }
