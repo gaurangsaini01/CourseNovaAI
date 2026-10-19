@@ -3,6 +3,10 @@ services:
     image: asia-south2-docker.pkg.dev/project-4d3d7acb-058d-4117-94f/coursenova/server:latest
     env_file:
       - ./server/.env
+    deploy:
+      resources:
+        limits:
+          memory: 512M
     restart: unless-stopped
   client:
     image: asia-south2-docker.pkg.dev/project-4d3d7acb-058d-4117-94f/coursenova/client:latest
@@ -10,9 +14,17 @@ services:
       - "80:80"
     depends_on:
       - server
+    deploy:
+      resources:
+        limits:
+          memory: 256M
     restart: unless-stopped
   ai-server:
     image: asia-south2-docker.pkg.dev/project-4d3d7acb-058d-4117-94f/coursenova/ai-server:latest
     env_file:
       - ../CourseNova-FastApi-Backend/.env
+    deploy:
+      resources:
+        limits:
+          memory: 1G
     restart: unless-stopped
